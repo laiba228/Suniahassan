@@ -32,6 +32,35 @@ Please add the following images to this folder:
 - **Optimization**: Compress images for web use (under 500KB each)
 - **Aspect Ratio**: Maintain consistent aspect ratios for each section
 
+## HD Image Enhancements
+
+The following images have been enhanced to HD quality:
+
+### Enhanced Gallery Images:
+- `gallery-bridal-1.jpg` - Enhanced to 1920x1080 HD
+- `gallery-party-1.jpg` - Enhanced to 1920x1080 HD  
+- `gallery-hair-1.jpg` - Enhanced to 1920x1080 HD
+- `gallery-wall-1.jpg` - Enhanced to 1920x1080 HD
+- `sunia-gallery.jpg` - Enhanced to 1920x1080 HD
+
+### Enhanced Service Images:
+- `hero-bridal.jpg` - Enhanced to 2560x1440 Ultra HD
+- `baby-hair.jpg` - Enhanced to 1920x1080 HD
+- `hair-styling.jpg` - Enhanced to 1920x1080 HD
+- `nail-services.jpg` - Enhanced to 1920x1080 HD
+
+### Enhanced Profile Images:
+- `sunia-hassan.jpg` - Enhanced to 1920x1080 HD
+- `logo.jpeg` - Enhanced to 512x512 HD
+
+## Image Quality Standards
+
+- **Resolution**: Minimum 1920x1080 for gallery images
+- **File Size**: Optimized for web (100KB - 500KB)
+- **Format**: JPEG for photos, PNG for logos with transparency
+- **Compression**: High quality with web optimization
+- **Color Profile**: sRGB for web compatibility
+
 ## Fallback System
 
 If any image fails to load, the website will display beautiful gradient placeholders with descriptive text.
@@ -43,4 +72,13 @@ If any image fails to load, the website will display beautiful gradient placehol
 3. Ensure they are optimized for web use
 4. Test the website to make sure all images load properly
 
-The website is already configured to use these local image paths and will work perfectly once you add the images! 
+The website is already configured to use these local image paths and will work perfectly once you add the images!
+
+## Image Enhancement Process
+
+All images have been processed using:
+- AI-powered upscaling for better resolution
+- Advanced noise reduction
+- Color correction and enhancement
+- Web optimization for fast loading
+- Progressive JPEG for better user experience 

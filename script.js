@@ -1,9 +1,11 @@
-// Initialize AOS (Animate On Scroll)
+// Enhanced AOS (Animate On Scroll) Configuration
 AOS.init({
-    duration: 1000,
-    easing: 'ease-in-out',
+    duration: 1200,
+    easing: 'ease-out-cubic',
     once: true,
-    offset: 100
+    offset: 100,
+    delay: 100,
+    anchorPlacement: 'top-bottom'
 });
 
 // DOM Elements
@@ -12,26 +14,116 @@ const navMenu = document.getElementById('nav-menu');
 const navLinks = document.querySelectorAll('.nav-link');
 const bookingForm = document.getElementById('bookingForm');
 const navbar = document.querySelector('.navbar');
+const heroSection = document.querySelector('.hero');
+const scrollIndicator = document.querySelector('.scroll-indicator');
 
-// Mobile Navigation Toggle
+// Simple Image Loading Test
+function testImageLoading() {
+    const images = document.querySelectorAll('img');
+    console.log('Testing image loading for', images.length, 'images');
+    
+    images.forEach((img, index) => {
+        console.log(`Image ${index + 1}:`, img.src);
+        
+        img.addEventListener('load', function() {
+            console.log(`✅ Image loaded successfully:`, this.src);
+            this.style.opacity = '1';
+        });
+        
+        img.addEventListener('error', function() {
+            console.log(`❌ Image failed to load:`, this.src);
+            this.style.opacity = '0.5';
+            this.style.border = '2px solid red';
+        });
+    });
+}
+
+// Test image loading when page loads
+document.addEventListener('DOMContentLoaded', testImageLoading);
+
+// Enhanced Image Loading System
+function enhanceImageQuality() {
+    const images = document.querySelectorAll('img');
+    
+    images.forEach(img => {
+        // Add loading animation
+        const container = img.parentElement;
+        if (container) {
+            container.classList.add('image-container');
+        }
+        
+        // Enhanced image loading
+        img.addEventListener('load', function() {
+            this.classList.add('loaded');
+            this.classList.add('hd-image');
+            
+            // Remove shimmer effect
+            const shimmer = this.parentElement.querySelector('::before');
+            if (shimmer) {
+                shimmer.style.display = 'none';
+            }
+        });
+        
+        // Handle image errors with fallback
+        img.addEventListener('error', function() {
+            this.style.display = 'none';
+            const fallback = document.createElement('div');
+            fallback.className = 'image-fallback';
+            fallback.innerHTML = `
+                <div style="
+                    width: 100%;
+                    height: 100%;
+                    background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 15px;
+                    color: #666;
+                    font-size: 0.9rem;
+                    text-align: center;
+                    padding: 20px;
+                ">
+                    <div>
+                        <i class="fas fa-image" style="font-size: 2rem; margin-bottom: 10px; opacity: 0.5;"></i>
+                        <br>
+                        Image Loading...
+                    </div>
+                </div>
+            `;
+            this.parentElement.appendChild(fallback);
+        });
+    });
+}
+
+// Enhanced Mobile Navigation Toggle with Smooth Animation
 navToggle.addEventListener('click', () => {
     navMenu.classList.toggle('active');
     
-    // Animate hamburger menu
+    // Enhanced hamburger animation
     const bars = navToggle.querySelectorAll('.bar');
     bars.forEach((bar, index) => {
         if (navMenu.classList.contains('active')) {
-            if (index === 0) bar.style.transform = 'rotate(45deg) translate(5px, 5px)';
-            if (index === 1) bar.style.opacity = '0';
-            if (index === 2) bar.style.transform = 'rotate(-45deg) translate(7px, -6px)';
+            if (index === 0) {
+                bar.style.transform = 'rotate(45deg) translate(6px, 6px)';
+                bar.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+            }
+            if (index === 1) {
+                bar.style.opacity = '0';
+                bar.style.transform = 'translateX(-20px)';
+            }
+            if (index === 2) {
+                bar.style.transform = 'rotate(-45deg) translate(6px, -6px)';
+                bar.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+            }
         } else {
             bar.style.transform = 'none';
             bar.style.opacity = '1';
+            bar.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
         }
     });
 });
 
-// Close mobile menu when clicking on a link
+// Enhanced Close mobile menu when clicking on a link
 navLinks.forEach(link => {
     link.addEventListener('click', () => {
         navMenu.classList.remove('active');
@@ -43,18 +135,34 @@ navLinks.forEach(link => {
     });
 });
 
-// Navbar scroll effect
+// Enhanced Navbar scroll effect with smooth transitions
+let lastScrollY = window.scrollY;
 window.addEventListener('scroll', () => {
-    if (window.scrollY > 100) {
+    const currentScrollY = window.scrollY;
+    
+    if (currentScrollY > 100) {
         navbar.style.background = 'rgba(255, 255, 255, 0.98)';
-        navbar.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.15)';
+        navbar.style.backdropFilter = 'blur(20px)';
+        navbar.style.boxShadow = '0 8px 32px rgba(44, 24, 16, 0.12)';
+        navbar.style.borderBottom = '1px solid rgba(212, 175, 55, 0.2)';
     } else {
         navbar.style.background = 'rgba(255, 255, 255, 0.95)';
-        navbar.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
+        navbar.style.backdropFilter = 'blur(15px)';
+        navbar.style.boxShadow = '0 4px 20px rgba(44, 24, 16, 0.08)';
+        navbar.style.borderBottom = '1px solid rgba(212, 175, 55, 0.1)';
     }
+    
+    // Hide/show navbar on scroll
+    if (currentScrollY > lastScrollY && currentScrollY > 200) {
+        navbar.style.transform = 'translateY(-100%)';
+    } else {
+        navbar.style.transform = 'translateY(0)';
+    }
+    
+    lastScrollY = currentScrollY;
 });
 
-// Smooth scrolling for navigation links
+// Enhanced Smooth scrolling for navigation links with easing
 navLinks.forEach(link => {
     link.addEventListener('click', (e) => {
         e.preventDefault();
@@ -62,16 +170,35 @@ navLinks.forEach(link => {
         const targetSection = document.querySelector(targetId);
         
         if (targetSection) {
-            const offsetTop = targetSection.offsetTop - 80; // Account for fixed navbar
-            window.scrollTo({
-                top: offsetTop,
-                behavior: 'smooth'
-            });
+            const offsetTop = targetSection.offsetTop - 80;
+            
+            // Enhanced smooth scroll with easing
+            const startPosition = window.pageYOffset;
+            const distance = offsetTop - startPosition;
+            const duration = 1000;
+            let start = null;
+            
+            function animation(currentTime) {
+                if (start === null) start = currentTime;
+                const timeElapsed = currentTime - start;
+                const run = easeInOutCubic(timeElapsed, startPosition, distance, duration);
+                window.scrollTo(0, run);
+                if (timeElapsed < duration) requestAnimationFrame(animation);
+            }
+            
+            function easeInOutCubic(t, b, c, d) {
+                t /= d / 2;
+                if (t < 1) return c / 2 * t * t * t + b;
+                t -= 2;
+                return c / 2 * (t * t * t + 2) + b;
+            }
+            
+            requestAnimationFrame(animation);
         }
     });
 });
 
-// Form submission handling
+// Enhanced Form submission handling with better UX
 if (bookingForm) {
     bookingForm.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -87,32 +214,42 @@ if (bookingForm) {
             message: formData.get('message')
         };
         
-        // Validate form
+        // Enhanced form validation
         if (validateBookingForm(bookingData)) {
-            // Show success message
-            showNotification('Appointment request submitted successfully! We will contact you soon.', 'success');
+            // Show enhanced success message
+            showEnhancedNotification('Appointment request submitted successfully! We will contact you soon.', 'success');
             
-            // Reset form
+            // Reset form with animation
+            const formElements = bookingForm.querySelectorAll('input, select, textarea');
+            formElements.forEach((element, index) => {
+                setTimeout(() => {
+                    element.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        element.style.transform = 'scale(1)';
+                    }, 150);
+                }, index * 100);
+            });
+            
             bookingForm.reset();
             
             // Simulate form submission (in real implementation, send to server)
             console.log('Booking Data:', bookingData);
             
-            // Send WhatsApp message with booking details
+            // Send WhatsApp message
             sendWhatsAppMessage(bookingData);
         }
     });
 }
 
-// Form validation
+// Enhanced Form validation with better feedback
 function validateBookingForm(data) {
     const errors = [];
     
     if (!data.name || data.name.trim().length < 2) {
-        errors.push('Please enter a valid name');
+        errors.push('Please enter a valid name (minimum 2 characters)');
     }
     
-    if (!data.phone || data.phone.trim().length < 10) {
+    if (!data.phone || !/^[\+]?[0-9\s\-\(\)]{10,}$/.test(data.phone)) {
         errors.push('Please enter a valid phone number');
     }
     
@@ -129,280 +266,240 @@ function validateBookingForm(data) {
     }
     
     if (errors.length > 0) {
-        showNotification(errors.join('\n'), 'error');
+        showEnhancedNotification(errors.join('\n'), 'error');
         return false;
     }
     
     return true;
 }
 
-// Send WhatsApp message with booking details
+// Enhanced WhatsApp message function
 function sendWhatsAppMessage(bookingData) {
-    const phone = '923101129666'; // Sunia Hassan's phone number
-    const serviceNames = {
-        'bridal': 'Bridal Package - Rs. 25,000',
-        'party': 'Party Makeup - Rs. 12,000',
-        'hair': 'Hair Styling - Rs. 5,000',
-        'nails': 'Nail Services - Rs. 3,500'
-    };
-    
-    const message = `Hi! I would like to book an appointment at Sunia Hassan Makeover Lounge.
+    const message = `Hello! I would like to book an appointment at Sunia Hassan Makeover Lounge.
 
-Name: ${bookingData.name}
-Phone: ${bookingData.phone}
-Service: ${serviceNames[bookingData.service]}
+Service: ${bookingData.service}
 Date: ${bookingData.date}
 Time: ${bookingData.time}
-Special Requirements: ${bookingData.message || 'None'}
+Name: ${bookingData.name}
+Phone: ${bookingData.phone}
+${bookingData.message ? `Message: ${bookingData.message}` : ''}
 
-Please confirm my appointment. Thank you!`;
+Please contact me to confirm my appointment. Thank you!`;
+
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappUrl = `https://wa.me/923101129666?text=${encodedMessage}`;
     
-    const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+    // Open WhatsApp with animation
+    setTimeout(() => {
     window.open(whatsappUrl, '_blank');
+    }, 1000);
 }
 
-// Notification system
-function showNotification(message, type = 'info') {
+// Enhanced Notification system with better animations
+function showEnhancedNotification(message, type = 'info') {
     // Remove existing notifications
     const existingNotifications = document.querySelectorAll('.notification');
     existingNotifications.forEach(notification => notification.remove());
     
-    // Create notification element
     const notification = document.createElement('div');
     notification.className = `notification notification-${type}`;
     notification.innerHTML = `
         <div class="notification-content">
+            <i class="notification-icon ${getNotificationIcon(type)}"></i>
             <span class="notification-message">${message}</span>
             <button class="notification-close">&times;</button>
         </div>
     `;
     
-    // Add styles
+    // Add enhanced styles
     notification.style.cssText = `
         position: fixed;
         top: 100px;
         right: 20px;
-        background: ${type === 'success' ? '#4CAF50' : type === 'error' ? '#f44336' : '#2196F3'};
+        background: ${getNotificationColor(type)};
         color: white;
-        padding: 15px 20px;
-        border-radius: 8px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
         z-index: 10000;
         max-width: 400px;
-        animation: slideInRight 0.3s ease;
+        transform: translateX(100%);
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
     `;
     
-    // Add to page
     document.body.appendChild(notification);
+    
+    // Animate in
+    setTimeout(() => {
+        notification.style.transform = 'translateX(0)';
+    }, 100);
+    
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        notification.style.transform = 'translateX(100%)';
+        setTimeout(() => notification.remove(), 500);
+    }, 5000);
     
     // Close button functionality
     const closeBtn = notification.querySelector('.notification-close');
     closeBtn.addEventListener('click', () => {
-        notification.style.animation = 'slideOutRight 0.3s ease';
-        setTimeout(() => notification.remove(), 300);
+        notification.style.transform = 'translateX(100%)';
+        setTimeout(() => notification.remove(), 500);
     });
-    
-    // Auto remove after 5 seconds
-    setTimeout(() => {
-        if (notification.parentNode) {
-            notification.style.animation = 'slideOutRight 0.3s ease';
-            setTimeout(() => notification.remove(), 300);
-        }
-    }, 5000);
 }
 
-// Add notification animations to CSS
-const notificationStyles = document.createElement('style');
-notificationStyles.textContent = `
-    @keyframes slideInRight {
-        from {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-        to {
-            transform: translateX(0);
-            opacity: 1;
-        }
+function getNotificationIcon(type) {
+    switch (type) {
+        case 'success': return 'fas fa-check-circle';
+        case 'error': return 'fas fa-exclamation-circle';
+        case 'warning': return 'fas fa-exclamation-triangle';
+        default: return 'fas fa-info-circle';
     }
-    
-    @keyframes slideOutRight {
-        from {
-            transform: translateX(0);
-            opacity: 1;
-        }
-        to {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-    }
-    
-    .notification-content {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 15px;
-    }
-    
-    .notification-close {
-        background: none;
-        border: none;
-        color: white;
-        font-size: 20px;
-        cursor: pointer;
-        padding: 0;
-        line-height: 1;
-    }
-    
-    .notification-close:hover {
-        opacity: 0.8;
-    }
-`;
-document.head.appendChild(notificationStyles);
+}
 
-// Gallery lightbox functionality
-const galleryItems = document.querySelectorAll('.gallery-item');
-galleryItems.forEach(item => {
-    item.addEventListener('click', () => {
-        const img = item.querySelector('img');
-        const title = item.querySelector('h3').textContent;
-        const description = item.querySelector('p')?.textContent || '';
-        openLightbox(img.src, title, description);
-    });
-});
+function getNotificationColor(type) {
+    switch (type) {
+        case 'success': return 'linear-gradient(135deg, #4CAF50, #45a049)';
+        case 'error': return 'linear-gradient(135deg, #f44336, #d32f2f)';
+        case 'warning': return 'linear-gradient(135deg, #ff9800, #f57c00)';
+        default: return 'linear-gradient(135deg, #2196F3, #1976D2)';
+    }
+}
 
+// Enhanced Lightbox functionality
 function openLightbox(imageSrc, title, description) {
-    // Create lightbox overlay
     const lightbox = document.createElement('div');
     lightbox.className = 'lightbox';
     lightbox.innerHTML = `
+        <div class="lightbox-overlay"></div>
         <div class="lightbox-content">
             <button class="lightbox-close">&times;</button>
-            <img src="${imageSrc}" alt="${title}">
+            <img src="${imageSrc}" alt="${title}" class="lightbox-image">
+            <div class="lightbox-info">
             <h3>${title}</h3>
             <p>${description}</p>
+            </div>
         </div>
     `;
     
-    // Add lightbox styles
+    // Add enhanced styles
     lightbox.style.cssText = `
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0.9);
+        z-index: 10000;
         display: flex;
         align-items: center;
         justify-content: center;
-        z-index: 10000;
-        animation: fadeIn 0.3s ease;
+        opacity: 0;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     `;
     
-    const lightboxContent = lightbox.querySelector('.lightbox-content');
-    lightboxContent.style.cssText = `
+    const overlay = lightbox.querySelector('.lightbox-overlay');
+    overlay.style.cssText = `
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        backdrop-filter: blur(10px);
+    `;
+    
+    const content = lightbox.querySelector('.lightbox-content');
+    content.style.cssText = `
         position: relative;
         max-width: 90%;
         max-height: 90%;
-        text-align: center;
-    `;
-    
-    const lightboxImg = lightbox.querySelector('img');
-    lightboxImg.style.cssText = `
-        max-width: 100%;
-        max-height: 80vh;
-        border-radius: 10px;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-    `;
-    
-    const lightboxTitle = lightbox.querySelector('h3');
-    lightboxTitle.style.cssText = `
-        color: white;
-        margin-top: 20px;
-        font-size: 1.5rem;
-        font-family: 'Playfair Display', serif;
-    `;
-    
-    const lightboxDescription = lightbox.querySelector('p');
-    lightboxDescription.style.cssText = `
-        color: #d2b48c;
-        margin-top: 10px;
-        font-size: 1rem;
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        transform: scale(0.8);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     `;
     
     const closeBtn = lightbox.querySelector('.lightbox-close');
     closeBtn.style.cssText = `
         position: absolute;
-        top: -40px;
-        right: 0;
-        background: none;
-        border: none;
+        top: 15px;
+        right: 20px;
+        background: rgba(0, 0, 0, 0.5);
         color: white;
-        font-size: 30px;
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        font-size: 1.5rem;
         cursor: pointer;
-        padding: 0;
-        line-height: 1;
+        z-index: 1;
+        transition: all 0.3s ease;
     `;
     
-    // Add to page
+    const image = lightbox.querySelector('.lightbox-image');
+    image.style.cssText = `
+        width: 100%;
+        height: auto;
+        max-height: 70vh;
+        object-fit: cover;
+    `;
+    
+    const info = lightbox.querySelector('.lightbox-info');
+    info.style.cssText = `
+        padding: 20px;
+        text-align: center;
+    `;
+    
     document.body.appendChild(lightbox);
     
+    // Animate in
+    setTimeout(() => {
+        lightbox.style.opacity = '1';
+        content.style.transform = 'scale(1)';
+    }, 10);
+    
     // Close functionality
-    closeBtn.addEventListener('click', () => {
-        lightbox.style.animation = 'fadeOut 0.3s ease';
+    function closeLightbox() {
+        lightbox.style.opacity = '0';
+        content.style.transform = 'scale(0.8)';
         setTimeout(() => lightbox.remove(), 300);
-    });
+    }
     
-    lightbox.addEventListener('click', (e) => {
-        if (e.target === lightbox) {
-            lightbox.style.animation = 'fadeOut 0.3s ease';
-            setTimeout(() => lightbox.remove(), 300);
-        }
-    });
+    closeBtn.addEventListener('click', closeLightbox);
+    overlay.addEventListener('click', closeLightbox);
     
-    // Escape key to close
+    // Enhanced keyboard support
     document.addEventListener('keydown', function closeOnEscape(e) {
         if (e.key === 'Escape') {
-            lightbox.style.animation = 'fadeOut 0.3s ease';
-            setTimeout(() => lightbox.remove(), 300);
+            closeLightbox();
             document.removeEventListener('keydown', closeOnEscape);
         }
     });
 }
 
-// Add lightbox animations
-const lightboxStyles = document.createElement('style');
-lightboxStyles.textContent = `
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-        }
-        to {
-            opacity: 1;
-        }
-    }
+// Enhanced Gallery click handlers
+document.addEventListener('DOMContentLoaded', () => {
+    const galleryItems = document.querySelectorAll('.gallery-item');
     
-    @keyframes fadeOut {
-        from {
-            opacity: 1;
-        }
-        to {
-            opacity: 0;
-        }
-    }
-`;
-document.head.appendChild(lightboxStyles);
-
-// Parallax effect for hero section
-window.addEventListener('scroll', () => {
-    const scrolled = window.pageYOffset;
-    const hero = document.querySelector('.hero');
-    if (hero) {
-        const rate = scrolled * -0.5;
-        hero.style.transform = `translateY(${rate}px)`;
-    }
+    galleryItems.forEach(item => {
+        item.addEventListener('click', () => {
+            const img = item.querySelector('img');
+            const title = item.querySelector('h3')?.textContent || 'Gallery Image';
+            const description = item.querySelector('p')?.textContent || 'Beautiful work from our salon';
+            
+            openLightbox(img.src, title, description);
+        });
+    });
+    
+    // Initialize image enhancement
+    enhanceImageQuality();
 });
 
-// Intersection Observer for animations
+// Enhanced Scroll animations
 const observerOptions = {
     threshold: 0.1,
     rootMargin: '0px 0px -50px 0px'
@@ -411,180 +508,196 @@ const observerOptions = {
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
-            entry.target.classList.add('animate-in');
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
         }
     });
 }, observerOptions);
 
-// Observe elements for animation
-document.querySelectorAll('.service-card, .testimonial-card, .gallery-item').forEach(el => {
+// Observe all animated elements
+document.addEventListener('DOMContentLoaded', () => {
+    const animatedElements = document.querySelectorAll('.service-card, .gallery-item, .testimonial-card, .contact-item');
+    
+    animatedElements.forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
     observer.observe(el);
-});
-
-// Add animation styles
-const animationStyles = document.createElement('style');
-animationStyles.textContent = `
-    .animate-in {
-        animation: fadeInUp 0.8s ease forwards;
-    }
-    
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-`;
-document.head.appendChild(animationStyles);
-
-// Service package selection enhancement
-const serviceSelect = document.getElementById('service');
-if (serviceSelect) {
-    serviceSelect.addEventListener('change', (e) => {
-        const selectedService = e.target.value;
-        const servicePrices = {
-            'bridal': 'Rs. 25,000',
-            'party': 'Rs. 12,000',
-            'hair': 'Rs. 5,000',
-            'nails': 'Rs. 3,500'
-        };
-        
-        if (selectedService && servicePrices[selectedService]) {
-            showNotification(`Selected service: ${e.target.options[e.target.selectedIndex].text}`, 'info');
-        }
-    });
-}
-
-// Date picker enhancement
-const dateInput = document.getElementById('date');
-if (dateInput) {
-    // Set minimum date to today
-    const today = new Date().toISOString().split('T')[0];
-    dateInput.min = today;
-    
-    // Set maximum date to 3 months from now
-    const maxDate = new Date();
-    maxDate.setMonth(maxDate.getMonth() + 3);
-    dateInput.max = maxDate.toISOString().split('T')[0];
-}
-
-// WhatsApp integration with real numbers
-const whatsappLinks = document.querySelectorAll('.social-link.whatsapp');
-whatsappLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const phone = '923101129666'; // Sunia Hassan's phone number
-        const message = 'Hi! I would like to book an appointment at Sunia Hassan Makeover Lounge.';
-        const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-        window.open(whatsappUrl, '_blank');
     });
 });
 
-// Instagram integration
-const instagramLinks = document.querySelectorAll('.social-link.instagram');
-instagramLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const instagramUrl = 'https://instagram.com/suniahassan_makeover_lounge';
-        window.open(instagramUrl, '_blank');
-    });
-});
-
-// Facebook integration
-const facebookLinks = document.querySelectorAll('.social-link.facebook');
-facebookLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const facebookUrl = 'https://facebook.com/suniahassanmakeoverlounge';
-        window.open(facebookUrl, '_blank');
-    });
-});
-
-// Loading animation
+// Enhanced Loading animation
 window.addEventListener('load', () => {
-    document.body.classList.add('loaded');
-    
-    // Animate elements on load
-    const animateElements = document.querySelectorAll('.hero-text, .hero-image, .about-text, .about-image');
-    animateElements.forEach((el, index) => {
+    const loading = document.querySelector('.loading');
+    if (loading) {
+        loading.classList.add('loaded');
         setTimeout(() => {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(30px)';
-            el.style.transition = 'all 0.8s ease';
-            
-            setTimeout(() => {
-                el.style.opacity = '1';
-                el.style.transform = 'translateY(0)';
-            }, 100);
+            loading.style.display = 'none';
+        }, 500);
+    }
+    
+    // Animate hero elements
+    const heroElements = document.querySelectorAll('.hero-title, .hero-subtitle, .hero-description, .hero-buttons, .hero-features');
+    heroElements.forEach((el, index) => {
+        setTimeout(() => {
+            el.style.opacity = '1';
+            el.style.transform = 'translateY(0)';
         }, index * 200);
     });
 });
 
-// Scroll to top functionality
-const scrollToTopBtn = document.createElement('button');
-scrollToTopBtn.innerHTML = '<i class="fas fa-arrow-up"></i>';
-scrollToTopBtn.className = 'scroll-to-top';
-scrollToTopBtn.style.cssText = `
+// Enhanced Parallax effect for hero section
+window.addEventListener('scroll', () => {
+    const scrolled = window.pageYOffset;
+    const heroBackground = document.querySelector('.hero-background');
+    
+    if (heroBackground) {
+        heroBackground.style.transform = `translateY(${scrolled * 0.5}px)`;
+    }
+});
+
+// Enhanced Service card hover effects
+document.addEventListener('DOMContentLoaded', () => {
+    const serviceCards = document.querySelectorAll('.service-card');
+    
+    serviceCards.forEach(card => {
+        card.addEventListener('mouseenter', () => {
+            card.style.transform = 'translateY(-15px) rotateX(10deg)';
+            card.style.boxShadow = '0 25px 60px rgba(44, 24, 16, 0.2)';
+        });
+        
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'translateY(0) rotateX(0deg)';
+            card.style.boxShadow = '0 8px 32px rgba(44, 24, 16, 0.08)';
+        });
+    });
+});
+
+// Enhanced Gallery hover effects
+document.addEventListener('DOMContentLoaded', () => {
+    const galleryItems = document.querySelectorAll('.gallery-item');
+    
+    galleryItems.forEach(item => {
+        item.addEventListener('mouseenter', () => {
+            item.style.transform = 'translateY(-10px) scale(1.05)';
+            item.style.boxShadow = '0 20px 60px rgba(44, 24, 16, 0.2)';
+        });
+        
+        item.addEventListener('mouseleave', () => {
+            item.style.transform = 'translateY(0) scale(1)';
+            item.style.boxShadow = '0 8px 32px rgba(44, 24, 16, 0.08)';
+        });
+    });
+});
+
+// Enhanced Contact form animations
+document.addEventListener('DOMContentLoaded', () => {
+    const formInputs = document.querySelectorAll('.form-group input, .form-group select, .form-group textarea');
+    
+    formInputs.forEach(input => {
+        input.addEventListener('focus', () => {
+            input.parentElement.style.transform = 'scale(1.02)';
+        });
+        
+        input.addEventListener('blur', () => {
+            input.parentElement.style.transform = 'scale(1)';
+        });
+    });
+});
+
+// Enhanced Social media hover effects
+document.addEventListener('DOMContentLoaded', () => {
+    const socialLinks = document.querySelectorAll('.social-link');
+    
+    socialLinks.forEach(link => {
+        link.addEventListener('mouseenter', () => {
+            link.style.transform = 'translateY(-5px) scale(1.1)';
+            link.style.boxShadow = '0 15px 40px rgba(0, 0, 0, 0.3)';
+        });
+        
+        link.addEventListener('mouseleave', () => {
+            link.style.transform = 'translateY(0) scale(1)';
+            link.style.boxShadow = '0 8px 25px rgba(0, 0, 0, 0.2)';
+        });
+    });
+});
+
+// Enhanced Scroll to top functionality
+function createScrollToTop() {
+    const scrollToTop = document.createElement('button');
+    scrollToTop.innerHTML = '<i class="fas fa-chevron-up"></i>';
+    scrollToTop.className = 'scroll-to-top';
+    scrollToTop.style.cssText = `
     position: fixed;
     bottom: 30px;
     right: 30px;
     width: 50px;
     height: 50px;
-    background: var(--gradient-accent);
+        background: linear-gradient(135deg, #d4af37, #f4d03f);
     color: white;
     border: none;
     border-radius: 50%;
     cursor: pointer;
     opacity: 0;
     visibility: hidden;
-    transition: all 0.3s ease;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 1000;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
 `;
 
-document.body.appendChild(scrollToTopBtn);
+    document.body.appendChild(scrollToTop);
 
-// Show/hide scroll to top button
 window.addEventListener('scroll', () => {
     if (window.pageYOffset > 300) {
-        scrollToTopBtn.style.opacity = '1';
-        scrollToTopBtn.style.visibility = 'visible';
+            scrollToTop.style.opacity = '1';
+            scrollToTop.style.visibility = 'visible';
     } else {
-        scrollToTopBtn.style.opacity = '0';
-        scrollToTopBtn.style.visibility = 'hidden';
+            scrollToTop.style.opacity = '0';
+            scrollToTop.style.visibility = 'hidden';
     }
 });
 
-// Scroll to top functionality
-scrollToTopBtn.addEventListener('click', () => {
+    scrollToTop.addEventListener('click', () => {
     window.scrollTo({
         top: 0,
         behavior: 'smooth'
     });
 });
+    
+    scrollToTop.addEventListener('mouseenter', () => {
+        scrollToTop.style.transform = 'scale(1.1)';
+        scrollToTop.style.boxShadow = '0 12px 35px rgba(212, 175, 55, 0.4)';
+    });
+    
+    scrollToTop.addEventListener('mouseleave', () => {
+        scrollToTop.style.transform = 'scale(1)';
+        scrollToTop.style.boxShadow = '0 8px 25px rgba(212, 175, 55, 0.3)';
+    });
+}
+
+// Initialize scroll to top
+document.addEventListener('DOMContentLoaded', createScrollToTop);
 
 // Performance optimization - Lazy loading for images
-const images = document.querySelectorAll('img');
+function lazyLoadImages() {
+    const images = document.querySelectorAll('img[data-src]');
+    
 const imageObserver = new IntersectionObserver((entries, observer) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
             const img = entry.target;
-            img.src = img.dataset.src || img.src;
+                img.src = img.dataset.src;
             img.classList.remove('lazy');
             imageObserver.unobserve(img);
         }
     });
 });
 
-images.forEach(img => {
-    if (img.dataset.src) {
-        imageObserver.observe(img);
+    images.forEach(img => imageObserver.observe(img));
     }
-});
+
+// Initialize lazy loading
+document.addEventListener('DOMContentLoaded', lazyLoadImages);
 
 // Add floating contact button
 const floatingContactBtn = document.createElement('div');

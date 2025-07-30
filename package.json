@@ -1,0 +1,28 @@
+{
+  "name": "sunia-hassan-makeover-lounge",
+  "version": "1.0.0",
+  "description": "Premium salon website for Sunia Hassan Makeover Lounge in Sargodha",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx http-server . -p 3000 -o -c-1",
+    "start": "npx http-server . -p 3000 -o",
+    "serve": "npx http-server . -p 8080 -o"
+  },
+  "keywords": [
+    "salon",
+    "beauty",
+    "makeup",
+    "bridal",
+    "sargodha"
+  ],
+  "author": "Sunia Hassan Makeover Lounge",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "."
+  },
+  "homepage": "."
+} 

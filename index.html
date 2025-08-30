@@ -2,7 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes, maximum-scale=5.0">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     
     <!-- Primary Meta Tags -->
     <title>Sunia Hassan Makeover Lounge | Best Bridal Salon in Sargodha</title>
@@ -43,6 +47,7 @@
     
     <!-- Stylesheets -->
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="responsive-styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Dancing+Script:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
@@ -100,7 +105,7 @@
                 <a href="#contact" class="nav-link">Contact</a>
                 <a href="#appointment" class="nav-link appointment-btn">Book Now</a>
             </div>
-            <div class="nav-toggle" id="nav-toggle">
+            <div class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation menu">
                 <span class="bar"></span>
                 <span class="bar"></span>
                 <span class="bar"></span>
@@ -124,15 +129,15 @@
                 </div>
                 <div class="hero-features">
                     <div class="feature-item">
-                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star" aria-hidden="true"></i>
                         <span>Premium Services</span>
                     </div>
                     <div class="feature-item">
-                        <i class="fas fa-heart"></i>
+                        <i class="fas fa-heart" aria-hidden="true"></i>
                         <span>Bridal Specialists</span>
                     </div>
                     <div class="feature-item">
-                        <i class="fas fa-gem"></i>
+                        <i class="fas fa-gem" aria-hidden="true"></i>
                         <span>Luxury Experience</span>
                     </div>
                 </div>
@@ -413,11 +418,18 @@
                     <form id="bookingForm">
                         <div class="form-group">
                             <label for="name">Full Name</label>
-                            <input type="text" id="name" name="name" required>
+                            <input type="text" id="name" name="name" required 
+                                   placeholder="Enter your full name"
+                                   autocomplete="name"
+                                   inputmode="text">
                         </div>
                         <div class="form-group">
                             <label for="phone">Phone Number</label>
-                            <input type="tel" id="phone" name="phone" required>
+                            <input type="tel" id="phone" name="phone" required 
+                                   placeholder="Enter your phone number"
+                                   autocomplete="tel"
+                                   inputmode="tel"
+                                   pattern="[0-9+\-\s\(\)]{10,}">
                         </div>
                         <div class="form-group">
                             <label for="service">Select Service</label>
@@ -431,7 +443,9 @@
                         </div>
                         <div class="form-group">
                             <label for="date">Preferred Date</label>
-                            <input type="date" id="date" name="date" required>
+                            <input type="date" id="date" name="date" required 
+                                   min="" 
+                                   autocomplete="off">
                         </div>
                         <div class="form-group">
                             <label for="time">Preferred Time</label>

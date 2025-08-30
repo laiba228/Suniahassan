@@ -132,8 +132,33 @@ navLinks.forEach(link => {
             bar.style.transform = 'none';
             bar.style.opacity = '1';
         });
+        
+        // Restore body scroll on mobile
+        if (window.innerWidth <= 768) {
+            document.body.style.overflow = '';
+        }
     });
 });
+
+// Enhanced mobile touch handling
+if ('ontouchstart' in window) {
+    // Add touch-specific event listeners for mobile
+    navToggle.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        navToggle.style.transform = 'scale(0.95)';
+    });
+    
+    navToggle.addEventListener('touchend', () => {
+        navToggle.style.transform = 'scale(1)';
+    });
+    
+    // Improve touch scrolling on mobile
+    document.addEventListener('touchmove', (e) => {
+        if (navMenu.classList.contains('active')) {
+            e.preventDefault();
+        }
+    }, { passive: false });
+}
 
 // Enhanced Navbar scroll effect with smooth transitions
 let lastScrollY = window.scrollY;
@@ -170,12 +195,14 @@ navLinks.forEach(link => {
         const targetSection = document.querySelector(targetId);
         
         if (targetSection) {
-            const offsetTop = targetSection.offsetTop - 80;
+            // Mobile-specific offset adjustments
+            const isMobile = window.innerWidth <= 768;
+            const offsetTop = targetSection.offsetTop - (isMobile ? 70 : 80);
             
             // Enhanced smooth scroll with easing
             const startPosition = window.pageYOffset;
             const distance = offsetTop - startPosition;
-            const duration = 1000;
+            const duration = isMobile ? 800 : 1000; // Faster on mobile
             let start = null;
             
             function animation(currentTime) {
@@ -200,6 +227,13 @@ navLinks.forEach(link => {
 
 // Enhanced Form submission handling with better UX
 if (bookingForm) {
+    // Set minimum date to today for mobile date picker
+    const dateInput = document.getElementById('date');
+    if (dateInput) {
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.setAttribute('min', today);
+    }
+    
     bookingForm.addEventListener('submit', (e) => {
         e.preventDefault();
         
@@ -239,6 +273,35 @@ if (bookingForm) {
             sendWhatsAppMessage(bookingData);
         }
     });
+    
+    // Mobile-specific form improvements
+    if (window.innerWidth <= 768) {
+        const formInputs = bookingForm.querySelectorAll('input, select, textarea');
+        formInputs.forEach(input => {
+            // Add mobile-specific focus handling
+            input.addEventListener('focus', () => {
+                // Scroll to input on mobile
+                setTimeout(() => {
+                    input.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'center',
+                        inline: 'nearest'
+                    });
+                }, 300);
+            });
+            
+            // Add mobile-specific validation feedback
+            input.addEventListener('blur', () => {
+                if (input.hasAttribute('required') && !input.value.trim()) {
+                    input.style.borderColor = '#f44336';
+                    input.style.boxShadow = '0 0 0 2px rgba(244, 67, 54, 0.2)';
+                } else {
+                    input.style.borderColor = '';
+                    input.style.boxShadow = '';
+                }
+            });
+        });
+    }
 }
 
 // Enhanced Form validation with better feedback
@@ -556,37 +619,69 @@ window.addEventListener('scroll', () => {
     }
 });
 
-// Enhanced Service card hover effects
+// Enhanced Service card hover effects with mobile optimization
 document.addEventListener('DOMContentLoaded', () => {
     const serviceCards = document.querySelectorAll('.service-card');
     
     serviceCards.forEach(card => {
-        card.addEventListener('mouseenter', () => {
-            card.style.transform = 'translateY(-15px) rotateX(10deg)';
-            card.style.boxShadow = '0 25px 60px rgba(44, 24, 16, 0.2)';
-        });
+        // Only add hover effects on non-touch devices
+        if (!('ontouchstart' in window)) {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-15px) rotateX(10deg)';
+                card.style.boxShadow = '0 25px 60px rgba(44, 24, 16, 0.2)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0) rotateX(0deg)';
+                card.style.boxShadow = '0 8px 32px rgba(44, 24, 16, 0.08)';
+            });
+        }
         
-        card.addEventListener('mouseleave', () => {
-            card.style.transform = 'translateY(0) rotateX(0deg)';
-            card.style.boxShadow = '0 8px 32px rgba(44, 24, 16, 0.08)';
-        });
+        // Add touch-specific interactions for mobile
+        if ('ontouchstart' in window) {
+            card.addEventListener('touchstart', () => {
+                card.style.transform = 'scale(0.98)';
+                card.style.transition = 'transform 0.1s ease';
+            });
+            
+            card.addEventListener('touchend', () => {
+                card.style.transform = 'scale(1)';
+                card.style.transition = 'transform 0.2s ease';
+            });
+        }
     });
 });
 
-// Enhanced Gallery hover effects
+// Enhanced Gallery hover effects with mobile optimization
 document.addEventListener('DOMContentLoaded', () => {
     const galleryItems = document.querySelectorAll('.gallery-item');
     
     galleryItems.forEach(item => {
-        item.addEventListener('mouseenter', () => {
-            item.style.transform = 'translateY(-10px) scale(1.05)';
-            item.style.boxShadow = '0 20px 60px rgba(44, 24, 16, 0.2)';
-        });
+        // Only add hover effects on non-touch devices
+        if (!('ontouchstart' in window)) {
+            item.addEventListener('mouseenter', () => {
+                item.style.transform = 'translateY(-10px) scale(1.05)';
+                item.style.boxShadow = '0 20px 60px rgba(44, 24, 16, 0.2)';
+            });
+            
+            item.addEventListener('mouseleave', () => {
+                item.style.transform = 'translateY(0) scale(1)';
+                item.style.boxShadow = '0 8px 32px rgba(44, 24, 16, 0.08)';
+            });
+        }
         
-        item.addEventListener('mouseleave', () => {
-            item.style.transform = 'translateY(0) scale(1)';
-            item.style.boxShadow = '0 8px 32px rgba(44, 24, 16, 0.08)';
-        });
+        // Add touch-specific interactions for mobile
+        if ('ontouchstart' in window) {
+            item.addEventListener('touchstart', () => {
+                item.style.transform = 'scale(0.98)';
+                item.style.transition = 'transform 0.1s ease';
+            });
+            
+            item.addEventListener('touchend', () => {
+                item.style.transform = 'scale(1)';
+                item.style.transition = 'transform 0.2s ease';
+            });
+        }
     });
 });
 
@@ -699,19 +794,19 @@ const imageObserver = new IntersectionObserver((entries, observer) => {
 // Initialize lazy loading
 document.addEventListener('DOMContentLoaded', lazyLoadImages);
 
-// Add floating contact button
+// Add mobile-optimized floating contact button
 const floatingContactBtn = document.createElement('div');
 floatingContactBtn.className = 'floating-contact';
 floatingContactBtn.innerHTML = `
     <div class="floating-contact-content">
-        <i class="fab fa-whatsapp"></i>
-        <span>Book Now</span>
+        <i class="fab fa-whatsapp" aria-hidden="true"></i>
+        <span class="floating-text">Book Now</span>
     </div>
 `;
 floatingContactBtn.style.cssText = `
     position: fixed;
     bottom: 100px;
-    right: 30px;
+    right: 20px;
     background: #25d366;
     color: white;
     padding: 15px 20px;
@@ -724,17 +819,62 @@ floatingContactBtn.style.cssText = `
     align-items: center;
     gap: 10px;
     font-weight: 600;
+    min-height: 48px;
+    min-width: 48px;
+    touch-action: manipulation;
 `;
 
 document.body.appendChild(floatingContactBtn);
 
-// Floating contact button functionality
+// Mobile-optimized floating contact button functionality
 floatingContactBtn.addEventListener('click', () => {
     const phone = '923101129666';
     const message = 'Hi! I would like to book an appointment at Sunia Hassan Makeover Lounge.';
     const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
+    
+    // Check if it's a mobile device
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        // For mobile, try to open WhatsApp app directly
+        window.location.href = whatsappUrl;
+    } else {
+        // For desktop, open in new tab
+        window.open(whatsappUrl, '_blank');
+    }
 });
+
+// Mobile-specific responsive behavior for floating button
+function updateFloatingButtonPosition() {
+    if (window.innerWidth <= 768) {
+        // Mobile layout
+        floatingContactBtn.style.bottom = '20px';
+        floatingContactBtn.style.right = '20px';
+        floatingContactBtn.style.padding = '12px 16px';
+        
+        // Hide text on very small screens
+        const floatingText = floatingContactBtn.querySelector('.floating-text');
+        if (window.innerWidth <= 480) {
+            floatingText.style.display = 'none';
+            floatingContactBtn.style.padding = '15px';
+            floatingContactBtn.style.borderRadius = '50%';
+        } else {
+            floatingText.style.display = 'inline';
+            floatingContactBtn.style.borderRadius = '50px';
+        }
+    } else {
+        // Desktop layout
+        floatingContactBtn.style.bottom = '30px';
+        floatingContactBtn.style.right = '30px';
+        floatingContactBtn.style.padding = '15px 20px';
+        floatingContactBtn.style.borderRadius = '50px';
+        const floatingText = floatingContactBtn.querySelector('.floating-text');
+        floatingText.style.display = 'inline';
+    }
+}
+
+// Update button position on resize and load
+window.addEventListener('resize', updateFloatingButtonPosition);
+window.addEventListener('load', updateFloatingButtonPosition);
+updateFloatingButtonPosition();
 
 floatingContactBtn.addEventListener('mouseenter', () => {
     floatingContactBtn.style.transform = 'scale(1.1)';
@@ -746,4 +886,56 @@ floatingContactBtn.addEventListener('mouseleave', () => {
     floatingContactBtn.style.boxShadow = '0 4px 20px rgba(37, 211, 102, 0.3)';
 });
 
-console.log('Sunia Hassan Makeover Lounge website loaded successfully!'); 
+// Mobile-specific performance optimizations
+function optimizeForMobile() {
+    if (window.innerWidth <= 768) {
+        // Reduce animation complexity on mobile
+        const animatedElements = document.querySelectorAll('.service-card, .gallery-item, .contact-item');
+        animatedElements.forEach(el => {
+            el.style.willChange = 'transform';
+        });
+        
+        // Optimize scroll performance
+        document.body.style.webkitOverflowScrolling = 'touch';
+        
+        // Reduce parallax effect on mobile for better performance
+        const heroBackground = document.querySelector('.hero-background');
+        if (heroBackground) {
+            heroBackground.style.transform = 'none';
+        }
+    }
+}
+
+// Initialize mobile optimizations
+window.addEventListener('load', optimizeForMobile);
+window.addEventListener('resize', optimizeForMobile);
+
+// Mobile detection utility
+const isMobile = {
+    Android: () => /Android/i.test(navigator.userAgent),
+    BlackBerry: () => /BlackBerry/i.test(navigator.userAgent),
+    iOS: () => /iPhone|iPad|iPod/i.test(navigator.userAgent),
+    Opera: () => /Opera Mini/i.test(navigator.userAgent),
+    Windows: () => /IEMobile/i.test(navigator.userAgent),
+    any: () => (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows())
+};
+
+// Apply mobile-specific optimizations
+if (isMobile.any()) {
+    // Disable hover effects on mobile
+    const style = document.createElement('style');
+    style.textContent = `
+        @media (max-width: 768px) {
+            .service-card:hover,
+            .gallery-item:hover,
+            .contact-item:hover {
+                transform: none !important;
+                box-shadow: var(--shadow-soft) !important;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+console.log('Sunia Hassan Makeover Lounge website loaded successfully!');
+console.log('Mobile optimized:', isMobile.any()); 
